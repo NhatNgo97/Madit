@@ -2,7 +2,7 @@ const e = require("express");
 
 const middlewareController = {
   paginatedResult: (model) => {
-    async (req, res, next) => {
+    return async (req, res, next) => {
       const page = parseInt(req.query.page);
       const limit = parseInt(req.query.limit);
       const byVotes = req.query.hot;
@@ -41,7 +41,7 @@ const middlewareController = {
             .limit(limit)
             .skip(startIndex)
             .exec();
-          res.paginatedResult = results;
+          res.paginatedResults = results;
           next();
         }
       } catch (err) {

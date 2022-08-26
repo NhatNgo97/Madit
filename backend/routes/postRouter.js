@@ -1,13 +1,22 @@
 const express = require("express");
+const middlewareController = require("../controllers/middlewareController");
 const postController = require("../controllers/postController");
+const Post = require("../models/posts");
 
 const postRouter = express.Router();
 
 //ADD A POST
 postRouter.post("/", postController.CreateAPost);
 
+//GET A POST
+postRouter.get("/:id", postController.getAPost);
+
 //GET ALL POST
-postRouter.get("/", postController.getPost);
+postRouter.get(
+  "/",
+  middlewareController.paginatedResult(Post),
+  postController.getAllPost
+);
 
 //DELETE A POST
 postRouter.delete("/:id", postController.deleteAPost);
