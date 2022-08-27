@@ -28,6 +28,47 @@ const authController = {
       { expiresIn: "365d" }
     );
   },
+
+  //REQUEST REFRESH TOKEN
+  requestRefreshToken: async (req, res) => {
+    try {
+      console.log(req.cookies);
+      const refreshToken = req.cookies.refreshToken;
+      if (!refreshToken) {
+        return res.status(401).json({
+          success: false,
+          message: "You are not Authenticated.",
+        });
+      }
+
+      jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
+        if (err) {
+          console.log(err);
+        }
+
+        //CREATE NEW ACCESS AND REFRESH TOKEN
+        const accessToken = authController.generateAccessToken(user);
+        const refreshToken = authController.generateRefreshToken(user);
+
+        res.cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          secure: false,
+          path: "/",
+          sameSite: "strict",
+        });
+        res.status(200).json({
+          accessToken: newAccessToken,
+          refreshToken: newRefreshToken,
+        });
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: err,
+      });
+    }
+  },
+
   //REGISTER A NEW USER
   register: async (req, res) => {
     try {
