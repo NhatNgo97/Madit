@@ -1,5 +1,10 @@
+import { Modal } from "@mui/material";
+import { useState } from "react";
 import LandingPageContent from "../components/view/LandingPage/LandingPageContent";
 import LandingPageForm from "../components/view/LandingPage/LandingPageForm";
+import { useSelector, useDispatch } from "react-redux";
+import SignUpModal from "../components/view/LandingPage/SignUpModal";
+import modalSlice from "../redux/modalSlice";
 
 function LandingPage() {
   return (
@@ -12,6 +17,7 @@ function LandingPage() {
           </div>
         </div>
       </div>
+      <SignUpModal />
     </section>
   );
 }
