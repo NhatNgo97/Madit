@@ -40,28 +40,20 @@ const authController = {
           message: "You are not Authenticated.",
         });
       }
-
-      jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
-        if (err) {
-          console.log(err);
-        }
-
-        //CREATE NEW ACCESS AND REFRESH TOKEN
-        const accessToken = authController.generateAccessToken(user);
-        const refreshToken = authController.generateRefreshToken(user);
-
-        res.cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          secure: false,
-          path: "/",
-          sameSite: "strict",
-        });
-        res.status(200).json({
-          accessToken: newAccessToken,
-          refreshToken: newRefreshToken,
-        });
+      const data = jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY);
+      const newAccessToken = authController.generateAccessToken(data);
+      res.status(200).json({
+        success: true,
+        accessToken: newAccessToken,
       });
     } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        return res.status(401).json({
+          success: false,
+          statusCode: 401,
+          message: "Invalid Refresh Token",
+        });
+      }
       res.status(500).json({
         success: false,
         message: err,
@@ -78,7 +70,7 @@ const authController = {
 
       //Create new user
       const newUser = await User.create({
-        username: req.body.username,
+        nickname: req.body.nickname,
         email: req.body.email,
         password: hashed,
       });
@@ -89,17 +81,25 @@ const authController = {
         user: newUser,
       });
     } catch (err) {
-      res.status(500).json({ success: false, message: err.message });
+      if (err.name === "ValidationError")
+        res.status(400).json({
+          success: false,
+          message: err.message,
+        });
+      else res.status(500).json({ success: false, message: err });
     }
   },
 
   //LOGIN IN AN EXISTING USER
   login: async (req, res) => {
     try {
-      const user = await User.findOne({ username: req.body.username });
+      const user = await User.findOne({ email: req.body.email });
       console.log(user);
       if (!user) {
-        res.status(401).json({ success: false, message: "Incorrect Username" });
+        res.status(401).json({
+          success: false,
+          message: "Email or Password is incorrect, Please try again",
+        });
         return;
       }
       const validPassword = await bcrypt.compare(
@@ -108,7 +108,10 @@ const authController = {
       );
       console.log(validPassword);
       if (!validPassword) {
-        res.status(401).json({ success: false, message: "Incorrect Password" });
+        res.status(401).json({
+          success: false,
+          message: "Email or Password is incorrect, Please try again",
+        });
         return;
       }
       const accessToken = authController.generateAccessToken(user);
@@ -124,10 +127,7 @@ const authController = {
 
       res.status(200).json({
         success: true,
-        user: {
-          ...user._doc,
-          accessToken: accessToken,
-        },
+        accessToken: accessToken,
       });
     } catch (err) {
       res.status(500).json({
