@@ -1,6 +1,7 @@
 const express = require("express");
 const authRouter = require("./authRouter");
 const postRouter = require("./postRouter");
+const userRouter = require("./userRouter");
 
 const router = express.Router();
 
@@ -13,5 +14,8 @@ router.use("/post", postRouter);
 
 //AUTH ROUTER
 router.use("/auth", authRouter);
+
+//USER ROUTER
+router.use("/user", userRouter);
 
 module.exports = router;
