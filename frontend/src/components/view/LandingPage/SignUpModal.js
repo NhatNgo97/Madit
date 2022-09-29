@@ -4,6 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import modalSlice from "../../../redux/modalSlice";
 import Divider from "../../common/Divider";
 import Button from "../../common/Button";
+import { useState } from "react";
+import { registerAsyncUser } from "../../../redux/authSlice";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 function SignUpModal() {
   const dispatch = useDispatch();
@@ -13,6 +17,41 @@ function SignUpModal() {
   function handleRegisterModalClose() {
     dispatch(modalSlice.actions.closeRegisterModal());
   }
+
+  const formik = useFormik({
+    initialValues: {
+      nickname: "",
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      nickname: Yup.string()
+        .max(20, "Maximum 20 chracter")
+        .required("Required"),
+      email: Yup.string()
+        .max(50, "Maximum 50 character")
+        .required("Required")
+        .matches(
+          /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+          "Please enter valid email address"
+        ),
+      password: Yup.string()
+        .required("Required")
+        .matches(
+          /^.{6,}$/,
+          "Minimum 6 characters, at least one letter and one number"
+        ),
+    }),
+    onSubmit: (values) => {
+      const user = {
+        nickname: values.nickname,
+        email: values.email,
+        password: values.password,
+      };
+      dispatch(registerAsyncUser(user));
+    },
+  });
+
   return (
     <Modal
       style={{
@@ -38,21 +77,42 @@ function SignUpModal() {
           </div>
         </div>
         <Divider />
-        <div className="flex flex-col gap-2">
+        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2">
           <input
-            placeholder="Username"
+            id="nickname"
+            name="nickname"
+            value={formik.values.nickname}
+            onChange={formik.handleChange}
+            placeholder="Nickname"
             className="h-[40px] p-2 border-[1px] rounded-md bg-slate-200"
           ></input>
+          {formik.errors.nickname && formik.touched.nickname && (
+            <p className="text-red-500 text-xs">{formik.errors.nickname}</p>
+          )}
           <input
+            id="email"
+            name="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
             placeholder="Email"
             className="h-[40px] p-2 border-[1px] rounded-md bg-slate-200"
           ></input>
+          {formik.errors.email && formik.touched.email && (
+            <p className="text-red-500 text-xs">{formik.errors.email}</p>
+          )}
           <input
+            id="password"
+            name="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
             type="password"
             placeholder="Password"
             className="h-[40px] p-2 border-[1px] rounded-md bg-slate-200"
           ></input>
-        </div>
+          {formik.errors.password && formik.touched.password && (
+            <p className="text-red-500 text-xs">{formik.errors.password}</p>
+          )}
+        </form>
         <div className="flex flex-col gap-2 text-xs text-[#606770]">
           <p>
             People who use our service may have uploaded your contact
@@ -64,7 +124,11 @@ function SignUpModal() {
             and can opt out at any time.
           </p>
         </div>
-        <Button className="h-[40px]" type="secondary">
+        <Button
+          onClick={formik.handleSubmit}
+          className="h-[40px]"
+          type="secondary"
+        >
           Sign Up
         </Button>
       </div>
