@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import modalSlice from "../../../redux/modalSlice";
 import Divider from "../../common/Divider";
 import Button from "../../common/Button";
-import { useState } from "react";
 import { registerAsyncUser } from "../../../redux/authSlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -42,13 +41,14 @@ function SignUpModal() {
           "Minimum 6 characters, at least one letter and one number"
         ),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values, { resetForm }) => {
       const user = {
         nickname: values.nickname,
         email: values.email,
         password: values.password,
       };
-      dispatch(registerAsyncUser(user));
+      await dispatch(registerAsyncUser(user));
+      resetForm();
     },
   });
 

@@ -19,12 +19,22 @@ const authService = {
     });
   },
   logout() {
-    return api.post("/v1/auth/logout");
+    return api.post(
+      "/v1/auth/logout",
+      {},
+      {
+        withCredentials: true,
+      }
+    );
   },
   requestRefreshToken() {
-    return api.post("v1/auth/refresh", {
-      withCredentials: true,
-    });
+    return api.post(
+      "v1/auth/refresh",
+      {},
+      {
+        withCredentials: true,
+      }
+    );
   },
 };
 
