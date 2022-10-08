@@ -1,24 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import AppContainer from "./components/layout/AppContainer";
+import AppRouter from "./components/router/AppRouter";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginWithTokenAsyncUser } from "./redux/authSlice";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  const dispatch = useDispatch();
+  const loginState = useSelector((state) => state.auth.login.status);
+  useEffect(() => {
+    console.log("sad");
+    dispatch(loginWithTokenAsyncUser());
+  }, []);
+  return loginState === "pending" ? (
+    <div>Loading</div>
+  ) : (
+    <AppRouter></AppRouter>
   );
 }
 
