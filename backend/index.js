@@ -14,13 +14,13 @@ const app = express();
 dotenv.config();
 
 var corsOptions = {
-  origin: "https://madit-frontend-git-dev-nhatngo97.vercel.app/",
+  origin: "https://madit-frontend-git-dev-nhatngo97.vercel.app",
   optionsSuccessStatus: 200,
   credentials: true,
 };
 
 app.use(bodyParser.json({ limit: "50mb" }));
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(morgan("common"));
 app.use(cookieParser());
 
