@@ -6,7 +6,11 @@ const Post = require("../models/posts");
 const postRouter = express.Router();
 
 //ADD A POST
-postRouter.post("/", postController.CreateAPost);
+postRouter.post(
+  "/",
+  middlewareController.verifyToken,
+  postController.CreateAPost
+);
 
 //GET A POST
 postRouter.get("/:id", postController.getAPost);

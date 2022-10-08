@@ -23,7 +23,7 @@ const userController = {
       res.status(500).json({
         success: false,
         statusCode: 500,
-        message: err,
+        message: err.message,
       });
     }
   },
