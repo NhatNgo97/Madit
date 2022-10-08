@@ -32,8 +32,9 @@ const authController = {
   //REQUEST REFRESH TOKEN
   requestRefreshToken: async (req, res) => {
     try {
-      console.log(req.cookies);
+      const cookies = req.cookies;
       const refreshToken = req.cookies.refreshToken;
+      console.log(cookies);
       if (!refreshToken) {
         return res.status(401).json({
           success: false,
@@ -41,6 +42,7 @@ const authController = {
         });
       }
       const data = jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY);
+      console.log(data);
       const newAccessToken = authController.generateAccessToken(data);
       res.status(200).json({
         success: true,
@@ -48,10 +50,9 @@ const authController = {
       });
     } catch (err) {
       if (err.name === "TokenExpiredError") {
-        return res.status(401).json({
+        return res.status(403).json({
           success: false,
-          statusCode: 401,
-          message: "Invalid Refresh Token",
+          message: "Invalid Token",
         });
       }
       res.status(500).json({
@@ -67,6 +68,7 @@ const authController = {
       //Hashing password
       const salt = await bcrypt.genSalt(10);
       const hashed = await bcrypt.hash(req.body.password, salt);
+      console.log(req.body);
 
       //Create new user
       const newUser = await User.create({
@@ -141,7 +143,7 @@ const authController = {
   logout: async (req, res) => {
     try {
       //Clear cookies when user logs out
-      res.clearCookie("refreshToken");
+      res.clearCookie("refreshToken", { sameSite: "none", secure: true });
       res.status(200).json({
         success: true,
         message: "Logout successfully",
