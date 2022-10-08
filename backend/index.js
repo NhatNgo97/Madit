@@ -14,7 +14,7 @@ const app = express();
 dotenv.config();
 
 var corsOptions = {
-  origin: "https://madit-frontend-git-dev-nhatngo97.vercel.app/",
+  origin: "https://madit-frontend-git-dev-nhatngo97.vercel.app",
   optionsSuccessStatus: 200,
   credentials: true,
 };
