@@ -14,7 +14,7 @@ const app = express();
 dotenv.config();
 
 var corsOptions = {
-  origin: "https://madit-frontend-git-dev-nhatngo97.vercel.app",
+  origin: process.env.BASE_URL_FRONT_END,
   optionsSuccessStatus: 200,
   credentials: true,
 };
@@ -33,7 +33,5 @@ app.listen(8000, () => {
 });
 
 //ROUTES
-app.use("/", (req, res) => {
-  res.send("Madit Backend");
-});
+
 app.use("/v1", router);
