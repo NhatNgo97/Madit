@@ -11,7 +11,6 @@ function App() {
 
   const loginState = useSelector((state) => state.auth.login.status);
   useEffect(() => {
-    console.log("sad");
     dispatch(loginWithTokenAsyncUser());
   }, []);
   return loginState === "pending" ? (
