@@ -8,6 +8,7 @@ import { loginWithTokenAsyncUser } from "./redux/authSlice";
 
 function App() {
   const dispatch = useDispatch();
+
   const loginState = useSelector((state) => state.auth.login.status);
   useEffect(() => {
     console.log("sad");
@@ -16,7 +17,7 @@ function App() {
   return loginState === "pending" ? (
     <div>Loading</div>
   ) : (
-    <AppRouter></AppRouter>
+    <AppContainer></AppContainer>
   );
 }
 
