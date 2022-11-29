@@ -76,8 +76,8 @@ const authSlice = createSlice({
 export const registerAsyncUser = createAsyncThunk(
   "auth/register",
   async ({ nickname, email, password }) => {
-    console.log();
     const res = await authService.register({ nickname, email, password });
+    console.log(res);
     if (res.data.success === true) {
       return { success: true, message: "Register Successfully" };
     } else {
@@ -148,7 +148,7 @@ export const loginWithTokenAsyncUser = createAsyncThunk(
         throw Error(userRes.data);
       }
     } catch (err) {
-      console.log(err.response.data.message);
+      console.log(err);
       return rejectWithValue(err.response.data.message);
     }
   }

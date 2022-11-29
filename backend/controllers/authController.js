@@ -34,7 +34,7 @@ const authController = {
     try {
       const cookies = req.cookies;
       const refreshToken = req.cookies.refreshToken;
-      console.log(cookies);
+      console.log(refreshToken);
       if (!refreshToken) {
         return res.status(401).json({
           success: false,
