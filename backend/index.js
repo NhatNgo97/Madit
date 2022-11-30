@@ -33,7 +33,7 @@ app.listen(8000, () => {
 });
 
 //ROUTES
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
   return res.json("Madit Backend");
 });
 app.use("/v1", router);
