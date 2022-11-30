@@ -25,40 +25,30 @@ const authController = {
         isAdmin: user.isAdmin,
       },
       process.env.JWT_REFRESH_KEY,
-      { expiresIn: "365d" }
+      { expiresIn: "30s" }
     );
   },
 
   //REQUEST REFRESH TOKEN
   requestRefreshToken: async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
     try {
-      const cookies = req.cookies;
-      const refreshToken = req.cookies.refreshToken;
-      console.log(cookies);
       if (!refreshToken) {
         return res.status(401).json({
           success: false,
           message: "You are not Authenticated.",
         });
       }
-      const data = jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY);
-      console.log(data);
-      const newAccessToken = authController.generateAccessToken(data);
+      const user = jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY);
+      const newAccessToken = authController.generateAccessToken(user);
       res.status(200).json({
-        success: true,
         accessToken: newAccessToken,
       });
     } catch (err) {
-      if (err.name === "TokenExpiredError") {
-        return res.status(403).json({
-          success: false,
-          message: "Invalid Token",
-        });
-      }
-      res.status(500).json({
-        success: false,
-        message: err,
-      });
+      const user = jwt.decode(refreshToken, process.env.JWT_REFRESH_KEY);
+      console.log(user);
+      console.log("token expired");
+      return res.json("token expire");
     }
   },
 
