@@ -7,22 +7,12 @@ import RequireNotAuth from "./requireNotAuth";
 function AppRouter() {
   return (
     <Routes>
-      <Route
-        path="/login"
-        element={
-          <RequireNotAuth>
-            <LandingPage />
-          </RequireNotAuth>
-        }
-      />
-      <Route
-        path="/"
-        element={
-          <RequireAuth>
-            <HomePage />
-          </RequireAuth>
-        }
-      />
+      <Route element={<RequireNotAuth />}>
+        <Route path="/login" element={<LandingPage />} />
+      </Route>
+      <Route element={<RequireAuth />}>
+        <Route path="/" element={<HomePage />} />
+      </Route>
     </Routes>
   );
 }
