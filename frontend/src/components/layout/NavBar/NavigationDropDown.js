@@ -4,14 +4,17 @@ import { AiFillHome } from "react-icons/ai";
 import { BsSun } from "react-icons/bs";
 import { AiFillFire } from "react-icons/ai";
 import { FaUserFriends } from "react-icons/fa";
+import { useState } from "react";
 
 function NavigationDropDown() {
   const location = useLocation();
   const navigate = useNavigate();
-  const pathname = location.pathname;
-  const valueNavigation = pathname.slice(1, pathname.length);
+  const [valueNavigation, setValueNavigation] = useState(
+    location.pathname.slice(1, location.pathname.length)
+  );
 
   function handleOnChange(e) {
+    setValueNavigation(e.value);
     navigate(`/${e.value}`);
   }
   const options = [
@@ -28,12 +31,14 @@ function NavigationDropDown() {
 
   return (
     <Select
+      className="min-w-[100px] w-[15%]"
+      classNamePrefix="bg-white"
       options={options}
-      defaultValue={options[0].options}
+      defaultValue={options[0].options.find((i) => i.value === valueNavigation)}
       onChange={(e) => handleOnChange(e)}
       getOptionLabel={(e) => {
         return (
-          <div className="flex items-center">
+          <div className="flex items-center ">
             {e.icon}
             <span className="">{e.label}</span>
           </div>
