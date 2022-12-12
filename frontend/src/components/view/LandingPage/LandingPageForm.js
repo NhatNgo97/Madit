@@ -75,7 +75,7 @@ function LandingPageForm() {
         {formik.errors.password && formik.touched.password && (
           <p className="text-red-500 text-xs">{formik.errors.password}</p>
         )}
-        <Button className="h-[50px]" type="submit">
+        <Button className="h-[50px]" type="primary">
           Login
         </Button>
         <Divider />

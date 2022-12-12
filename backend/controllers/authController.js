@@ -31,34 +31,22 @@ const authController = {
 
   //REQUEST REFRESH TOKEN
   requestRefreshToken: async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
     try {
-      const cookies = req.cookies;
-      const refreshToken = req.cookies.refreshToken;
-      console.log(cookies);
       if (!refreshToken) {
         return res.status(401).json({
           success: false,
           message: "You are not Authenticated.",
         });
       }
-      const data = jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY);
-      console.log(data);
-      const newAccessToken = authController.generateAccessToken(data);
+      const user = jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY);
+      const newAccessToken = authController.generateAccessToken(user);
       res.status(200).json({
         success: true,
         accessToken: newAccessToken,
       });
     } catch (err) {
-      if (err.name === "TokenExpiredError") {
-        return res.status(403).json({
-          success: false,
-          message: "Invalid Token",
-        });
-      }
-      res.status(500).json({
-        success: false,
-        message: err,
-      });
+      authController.logout(req, res);
     }
   },
 
@@ -119,6 +107,10 @@ const authController = {
       const accessToken = authController.generateAccessToken(user);
       const refreshToken = authController.generateRefreshToken(user);
 
+      user.refreshTokens = [...user.refreshTokens, refreshToken];
+
+      await user.save();
+
       //STORE REFRESH TOKEN IN COOKIE
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
@@ -141,19 +133,27 @@ const authController = {
 
   //LOGOUT
   logout: async (req, res) => {
-    try {
-      //Clear cookies when user logs out
-      res.clearCookie("refreshToken", { sameSite: "none", secure: true });
-      res.status(200).json({
-        success: true,
-        message: "Logout successfully",
-      });
-    } catch (err) {
-      res.status(500).json({
-        success: false,
-        message: err.message,
-      });
-    }
+    //Clear cookies when user logs out
+    const cookies = req.cookies;
+    if (!cookies?.refreshToken) return res.status(204);
+
+    const refreshToken = cookies.refreshToken;
+    const { id } = jwt.decode(refreshToken, process.env.JWT_REFRESH_KEY);
+
+    //delete refreshToken in db
+    const user = await User.findOne({ _id: id }).exec();
+    user.refreshTokens = user.refreshTokens.filter((rt) => rt !== refreshToken);
+    await user.save();
+
+    //clear cookies
+    const result = await res.clearCookie("refreshToken", {
+      sameSite: "none",
+      secure: true,
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Logout successfully",
+    });
   },
 };
 

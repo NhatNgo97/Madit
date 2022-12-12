@@ -3,6 +3,7 @@ import authService from "../services/auth";
 import userService from "../services/user";
 
 const initialState = {
+  persist: JSON.parse(localStorage.getItem("persist") || false),
   user: null,
   accessToken: null,
   login: {
@@ -44,6 +45,8 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.accessToken = action.payload.token;
         state.login.message = "Login Successfully";
+        state.persist = true;
+        localStorage.setItem("persist", true);
       })
       .addCase(loginAsyncUser.rejected, (state, action) => {
         state.login.status = "failed";
@@ -55,6 +58,8 @@ const authSlice = createSlice({
       .addCase(logoutAsyncUser.fulfilled, (state, action) => {
         state.accessToken = null;
         state.user = null;
+        state.persist = false;
+        localStorage.setItem("persist", false);
       })
       .addCase(loginWithTokenAsyncUser.pending, (state, action) => {
         state.login.status = "pending";
