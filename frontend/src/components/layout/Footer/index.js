@@ -3,7 +3,7 @@ import Introduction from "./Introduction";
 
 function Footer() {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="md:flex flex-col gap-4 hidden">
       <Introduction />
       <Footy />
     </div>

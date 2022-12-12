@@ -9,8 +9,16 @@ function HomePage() {
     dispatch(logoutAsyncUser());
   }
   return (
-    <div className="">
-      <PostTile />
+    <div className="w-[600px] max-w-full">
+      {/* newfeed Component */}
+      <div className="flex flex-col gap-2">
+        <PostTile />
+        <PostTile />
+        <PostTile />
+        <PostTile />
+        <PostTile />
+        <PostTile />
+      </div>
     </div>
   );
 }

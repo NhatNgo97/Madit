@@ -3,7 +3,7 @@ import Divider from "../../common/Divider";
 
 function Footy() {
   return (
-    <div className="flex flex-col gap-2 w-[300px] bg-white rounded-md p-3 text-sm">
+    <div className="flex flex-col gap-2 w-[300px] bg-white rounded-md p-3 text-sm sticky top-2">
       <div className="flex flex-row">
         <div className="flex flex-col w-1/2">
           <Link to="#">User Agreement</Link>
