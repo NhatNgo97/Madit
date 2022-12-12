@@ -1,5 +1,5 @@
 function PostTile(props) {
-  return <div></div>;
+  return <div className="">posttile</div>;
 }
 
 export default PostTile;

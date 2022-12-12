@@ -10,10 +10,7 @@ function RequireAuth({ children }) {
   ) : (
     <div>
       <NavBar />
-      <main className="flex flex-row justify-center">
-        <Outlet />
-        <Footer />
-      </main>
+      <Outlet />
     </div>
   );
 }
