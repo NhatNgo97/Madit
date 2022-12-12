@@ -8,12 +8,12 @@ function HomePage() {
     dispatch(logoutAsyncUser());
   }
   return (
-    <div>
-      <h1>Home Page</h1>
-      <Button onClick={onLogoutClick} type="priamry">
-        Logout
-      </Button>
-    </div>
+    <main>
+      <div>
+        <div></div>
+        <div></div>
+      </div>
+    </main>
   );
 }
 

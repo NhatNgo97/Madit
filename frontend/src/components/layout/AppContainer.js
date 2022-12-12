@@ -6,7 +6,7 @@ function AppContainer({ children }) {
   const location = useLocation();
 
   return (
-    <div className="bg-mainBg">
+    <div className="bg-mainBg min-h-screen">
       {location.pathname !== "/login" && <NavBar />}
       <AppRouter />
     </div>
