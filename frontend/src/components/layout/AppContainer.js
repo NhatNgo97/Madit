@@ -7,7 +7,6 @@ function AppContainer({ children }) {
 
   return (
     <div className="bg-mainBg min-h-screen">
-      {location.pathname !== "/login" && <NavBar />}
       <AppRouter />
     </div>
   );

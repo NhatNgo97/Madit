@@ -1,5 +1,5 @@
-import Button from "../components/common/Button";
-import { logoutAsyncUser } from "../redux/authSlice";
+import Button from "../../components/common/Button";
+import { logoutAsyncUser } from "../../redux/authSlice";
 import { useDispatch } from "react-redux";
 
 function HomePage() {
@@ -8,12 +8,10 @@ function HomePage() {
     dispatch(logoutAsyncUser());
   }
   return (
-    <main>
-      <div>
-        <div></div>
-        <div></div>
-      </div>
-    </main>
+    <div className="">
+      <div>asdasd</div>
+      <div>asdad</div>
+    </div>
   );
 }
 

@@ -1,8 +1,11 @@
-import HomePage from "../../pages/HomePage";
+import HomePage from "../../pages/newfeedPage/HomePage";
 import LandingPage from "../../pages/LandingPage";
 import { Routes, Route } from "react-router-dom";
 import RequireAuth from "./RequireAuth";
 import RequireNotAuth from "./requireNotAuth";
+import NewPage from "../../pages/newfeedPage/NewPage";
+import PopularPage from "../../pages/newfeedPage/PopularPage";
+import FriendPage from "../../pages/newfeedPage/FriendPage";
 
 function AppRouter() {
   return (
@@ -12,6 +15,9 @@ function AppRouter() {
       </Route>
       <Route element={<RequireAuth />}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/new" element={<NewPage />} />
+        <Route path="/popular" element={<PopularPage />} />
+        <Route path="/friends" element={<FriendPage />} />
       </Route>
     </Routes>
   );

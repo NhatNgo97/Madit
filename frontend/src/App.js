@@ -3,17 +3,15 @@ import "./App.css";
 import AppContainer from "./components/layout/AppContainer";
 import AppRouter from "./components/router/AppRouter";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { loginWithTokenAsyncUser } from "./redux/authSlice";
+import { useSelector } from "react-redux";
 import useAuth from "./hooks/useAuth";
 
 function App() {
-  const dispatch = useDispatch();
-  const { persist } = useAuth();
+  const { persist, handleLoginWithToken } = useAuth();
 
   const loginState = useSelector((state) => state.auth.login.status);
   useEffect(() => {
-    persist && dispatch(loginWithTokenAsyncUser());
+    persist && handleLoginWithToken();
   }, []);
   return loginState === "pending" ? (
     <div>Loading</div>
