@@ -14,9 +14,9 @@ const userController = {
       });
     } catch (err) {
       if (err.name === "TokenExpiredError") {
-        return res.status(401).json({
+        return res.status(403).json({
           success: false,
-          statusCode: 401,
+          statusCode: 403,
           message: "Invalid Token",
         });
       }
