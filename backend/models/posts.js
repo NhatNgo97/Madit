@@ -7,13 +7,20 @@ const postSchema = mongoose.Schema(
     images: {
       type: String,
     },
-    upVotes: { type: Number },
-    downVotes: { type: Number },
+    upvotes: {
+      type: Array,
+      default: [],
+    },
+    downvotes: {
+      type: Array,
+      default: [],
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
       required: true,
     },
+    comment: [{ type: mongoose.Schema.Types.ObjectId, ref: "comments" }],
   },
   {
     timestamps: true,
