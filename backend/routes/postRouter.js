@@ -8,7 +8,7 @@ const postRouter = express.Router();
 //ADD A POST
 postRouter.post(
   "/",
-  middlewareController.verifyToken,
+  middlewareController.verifyTokenAndUserPostAuthorization,
   postController.CreateAPost
 );
 
@@ -29,9 +29,24 @@ postRouter.delete("/:id", postController.deleteAPost);
 postRouter.put("/:id", postController.EditAPost);
 
 //UPVOTE A POST
-postRouter.post("/upvote/:id", postController.upVoteAPost);
+postRouter.post(
+  "/upvote/:id",
+  middlewareController.verifyToken,
+  postController.upVoteAPost
+);
 
 //DOWNVOTE A POST
-postRouter.post("/downvote/:id", postController.downVoteAPost);
+postRouter.post(
+  "/downvote/:id",
+  middlewareController.verifyToken,
+  postController.downVoteAPost
+);
+
+//UNVOTE A POST
+postRouter.post(
+  "/unvote/:id",
+  middlewareController.verifyToken,
+  postController.cancelVoteAPost
+);
 
 module.exports = postRouter;

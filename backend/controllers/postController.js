@@ -69,8 +69,74 @@ const postController = {
       });
     }
   },
-  upVoteAPost: async (req, res) => {},
-  downVoteAPost: async (req, res) => {},
+  upVoteAPost: async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.id);
+      if (post.upvotes.includes(req.params.id)) {
+        return res.status(200).json({
+          sucess: true,
+          message: "Upvote successfully",
+        });
+      }
+      if (post.downvotes.includes(req.params.id)) {
+        await post.updateOne({ $pull: { downvotes: req.params.id } });
+      }
+      await post.updateOne({ $push: { upvotes: req.params.id } });
+      console.log(post);
+
+      return res.status(200).json({
+        sucess: true,
+        message: "Upvote successfully",
+      });
+    } catch (err) {
+      return res.status(500).json({
+        sucess: false,
+        message: err.message,
+      });
+    }
+  },
+  downVoteAPost: async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.id);
+      if (post.downvotes.includes(req.params.id)) {
+        return res.status(200).json({
+          sucess: true,
+          message: "Upvote successfully",
+        });
+      }
+      if (post.upvotes.includes(req.params.id)) {
+        await post.updateOne({ $pull: { upvotes: req.params.id } });
+      }
+      await post.updateOne({ $push: { downvotes: req.params.id } });
+      console.log(post);
+
+      return res.status(200).json({
+        sucess: true,
+        message: "Downvote successfully",
+      });
+    } catch (err) {
+      return res.status(500).json({
+        sucess: false,
+        message: err.message,
+      });
+    }
+  },
+  cancelVoteAPost: async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.id);
+      await post.updateOne({ $pull: { upvotes: req.params.id } });
+      await post.updateOne({ $pull: { downvotes: req.params.id } });
+      res.status(200).json({
+        sucess: true,
+        message: "Cancle vote successfully",
+      });
+    } catch (err) {
+      res.status(500).json({
+        sucess: false,
+        message: err.message,
+      });
+    }
+  },
 };
 
 module.exports = postController;
