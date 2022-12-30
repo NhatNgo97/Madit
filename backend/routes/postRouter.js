@@ -29,9 +29,9 @@ postRouter.delete("/:id", postController.deleteAPost);
 postRouter.put("/:id", postController.EditAPost);
 
 //UPVOTE A POST
-postRouter.post("/:id", postController.upVoteAPost);
+postRouter.post("/upvote/:id", postController.upVoteAPost);
 
 //DOWNVOTE A POST
-postRouter.post("/:id", postController.downVoteAPost);
+postRouter.post("/downvote/:id", postController.downVoteAPost);
 
 module.exports = postRouter;
