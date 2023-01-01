@@ -35,12 +35,12 @@ const postController = {
     try {
       await Post.findByIdAndDelete(req.params.id);
       res.status(200).json({
-        sucess: true,
+        success: true,
         message: "Delete successfully",
       });
     } catch (err) {
       res.status(500).json({
-        sucess: false,
+        success: false,
         message: "Delete Unsuccessfully, Please try again",
       });
     }
@@ -53,18 +53,18 @@ const postController = {
       if (post.user === req.body.userId) {
         await post.updateOne({ $set: req.body });
         res.status(200).json({
-          sucess: true,
+          success: true,
           message: "Post have been updated.",
         });
       } else {
         res.status(403).json({
-          sucess: false,
+          success: false,
           message: "You can only update your post",
         });
       }
     } catch (err) {
       res.status(500).json({
-        sucess: false,
+        success: false,
         message: err.message,
       });
     }
@@ -74,7 +74,7 @@ const postController = {
       const post = await Post.findById(req.params.id);
       if (post.upvotes.includes(req.params.id)) {
         return res.status(200).json({
-          sucess: true,
+          success: true,
           message: "Upvote successfully",
         });
       }
@@ -85,12 +85,12 @@ const postController = {
       console.log(post);
 
       return res.status(200).json({
-        sucess: true,
+        success: true,
         message: "Upvote successfully",
       });
     } catch (err) {
       return res.status(500).json({
-        sucess: false,
+        success: false,
         message: err.message,
       });
     }
@@ -100,7 +100,7 @@ const postController = {
       const post = await Post.findById(req.params.id);
       if (post.downvotes.includes(req.params.id)) {
         return res.status(200).json({
-          sucess: true,
+          success: true,
           message: "Upvote successfully",
         });
       }
@@ -111,12 +111,12 @@ const postController = {
       console.log(post);
 
       return res.status(200).json({
-        sucess: true,
+        success: true,
         message: "Downvote successfully",
       });
     } catch (err) {
       return res.status(500).json({
-        sucess: false,
+        success: false,
         message: err.message,
       });
     }
@@ -127,12 +127,12 @@ const postController = {
       await post.updateOne({ $pull: { upvotes: req.params.id } });
       await post.updateOne({ $pull: { downvotes: req.params.id } });
       res.status(200).json({
-        sucess: true,
+        success: true,
         message: "Cancle vote successfully",
       });
     } catch (err) {
       res.status(500).json({
-        sucess: false,
+        success: false,
         message: err.message,
       });
     }

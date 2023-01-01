@@ -12,7 +12,7 @@ const middlewareController = {
         next();
       } else {
         return res.status(401).json({
-          sucess: false,
+          success: false,
           message: "You're not authenticated. ",
         });
       }
