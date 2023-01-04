@@ -4,7 +4,15 @@ const postController = {
   //GET ALL POST
   getAllPost: async (req, res) => {
     try {
-      res.status(200).json(res.paginatedResults);
+      console.log(res.paginatedResults);
+      const results = await res.paginatedResults.results.populate({
+        path: "user",
+        select: "_id nickname avatar",
+      });
+      res.status(200).json({
+        ...res.paginatedResults,
+        results: results,
+      });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
@@ -13,7 +21,10 @@ const postController = {
   //GET A POST
   getAPost: async (req, res) => {
     try {
-      const post = await Post.findById(req.params.id).populate("user");
+      const post = await Post.findById(req.params.id).populate({
+        path: "user",
+        select: "_id nickname avatar",
+      });
       res.status(200).json(post);
     } catch (err) {
       res.status(500).json({ message: err.message });

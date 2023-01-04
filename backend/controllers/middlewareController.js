@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const Post = require("../models/posts");
 
 const middlewareController = {
   verifyToken: (req, res, next) => {
@@ -60,27 +61,26 @@ const middlewareController = {
           limit: limit,
         };
       }
-
       try {
         if (page && limit && byVotes) {
-          results.results = await model
+          results.results = model
             .find()
+            .lean()
             .sort({ upVotes: -1 })
             .limit(limit)
             .skip(startIndex)
             .exec();
           res.paginatedResult = results;
-          next();
         } else {
-          results.results = await model
+          results.results = model
             .find()
+            .lean()
             .sort({ createdAt: -1 })
             .limit(limit)
-            .skip(startIndex)
-            .exec();
+            .skip(startIndex);
           res.paginatedResults = results;
-          next();
         }
+        next();
       } catch (err) {
         res.status(500).json({ message: err.message });
       }
