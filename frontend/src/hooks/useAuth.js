@@ -5,6 +5,8 @@ import {
   logoutAsyncUser,
   registerAsyncUser,
 } from "../redux/authSlice";
+import api from "../services/api";
+import { useEffect } from "react";
 
 function useAuth() {
   const dispatch = useDispatch();
@@ -19,12 +21,25 @@ function useAuth() {
   };
 
   const handleLoginWithToken = async (user) => {
-    dispatch(loginWithTokenAsyncUser(user));
+    await dispatch(loginWithTokenAsyncUser(user));
   };
 
   const handleLogout = async () => {
     dispatch(logoutAsyncUser());
   };
+
+  //
+  useEffect(() => {
+    if (accessToken) {
+      const requestIntercept = api.interceptors.request.use(function (config) {
+        config.headers.authorization = `Bearer ${accessToken}`;
+        return config;
+      });
+      return () => {
+        api.interceptors.request.eject(requestIntercept);
+      };
+    }
+  }, [accessToken]);
 
   return {
     accessToken,
