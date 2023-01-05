@@ -10,8 +10,8 @@ const postController = {
         select: "_id nickname avatar",
       });
       res.status(200).json({
-        ...res.paginatedResults,
-        results: results,
+        success: true,
+        posts: { ...res.paginatedResults, results: results },
       });
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -83,20 +83,24 @@ const postController = {
   upVoteAPost: async (req, res) => {
     try {
       const post = await Post.findById(req.params.id);
-      if (post.upvotes.includes(req.params.id)) {
+      const userId = req.body.userId;
+      console.log(req.body.userId);
+      if (post.upvotes.includes(userId)) {
+        await post.updateOne({ $pull: { upvotes: userId } });
         return res.status(200).json({
           success: true,
-          message: "Upvote successfully",
+          type: "unvote",
+          message: "Un-Upvote successfully",
         });
       }
-      if (post.downvotes.includes(req.params.id)) {
-        await post.updateOne({ $pull: { downvotes: req.params.id } });
+      if (post.downvotes.includes(userId)) {
+        await post.updateOne({ $pull: { downvotes: userId } });
       }
-      await post.updateOne({ $push: { upvotes: req.params.id } });
-      console.log(post);
+      await post.updateOne({ $push: { upvotes: userId } });
 
       return res.status(200).json({
         success: true,
+        type: "vote",
         message: "Upvote successfully",
       });
     } catch (err) {
@@ -109,20 +113,24 @@ const postController = {
   downVoteAPost: async (req, res) => {
     try {
       const post = await Post.findById(req.params.id);
-      if (post.downvotes.includes(req.params.id)) {
+      const userId = req.body.userId;
+      if (post.downvotes.includes(userId)) {
+        await post.updateOne({ $pull: { downvotes: userId } });
         return res.status(200).json({
           success: true,
-          message: "Upvote successfully",
+          type: "unvote",
+          message: "Un-downvote successfully",
         });
       }
-      if (post.upvotes.includes(req.params.id)) {
-        await post.updateOne({ $pull: { upvotes: req.params.id } });
+      if (post.upvotes.includes(userId)) {
+        await post.updateOne({ $pull: { upvotes: userId } });
       }
-      await post.updateOne({ $push: { downvotes: req.params.id } });
+      await post.updateOne({ $push: { downvotes: userId } });
       console.log(post);
 
       return res.status(200).json({
         success: true,
+        type: "vote",
         message: "Downvote successfully",
       });
     } catch (err) {
