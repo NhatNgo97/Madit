@@ -27,8 +27,8 @@ const postSlice = createSlice({
 //Thunk Actions
 export const getAllPostAsyncAction = createAsyncThunk(
   "post/getAllPost",
-  async ({ accessToken }) => {
-    const res = await postService.getAllPost({ accessToken });
+  async () => {
+    const res = await postService.getAllPost();
     if (res.data.success === true) {
       return {
         success: true,

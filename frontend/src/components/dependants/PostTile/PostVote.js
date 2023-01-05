@@ -2,13 +2,10 @@ import { useState } from "react";
 import { BsArrowDownCircleFill } from "react-icons/bs";
 import { BsArrowDownCircle } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { upvoteAPostAsyncAction } from "../../../redux/postSlice";
-import api from "../../../services/api";
 import postService from "../../../services/post";
 
 function PostVote({ postId, upvotes, downvotes }) {
   const userId = useSelector((state) => state.auth.user._id);
-  const upvoteState = useSelector((state) => state.post.upvoteAPost.status);
   const dispatch = useDispatch();
   const [voteState, setVoteState] = useState({
     count: upvotes.length - downvotes.length,
