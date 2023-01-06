@@ -14,11 +14,8 @@ function PostVote({ postId, upvotes, downvotes }) {
   });
 
   function handleUpVote() {
-    // dispatch(upvoteAPostAsyncAction({ postId }));
     async function upvoteApi() {
       const res = await postService.upvoteAPost({ postId, userId });
-      console.log(postId);
-      console.log(res);
       if (res.data.success === true) {
         setVoteState({
           count:

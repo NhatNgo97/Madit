@@ -6,8 +6,11 @@ function PostContent({ title, description, commentCount, user }) {
   return (
     <div className="flex flex-col bg-white w-full p-2 gap-2 rounded-r-md">
       <div className="flex flex-row gap-2">
-        <Link to="#" className="flex flex-row">
-          <Avatar />
+        <Link to="#" className="flex flex-row items-center">
+          <div className="w-6">
+            <Avatar imgSrc={user.avatar} />
+          </div>
+
           <h3 className="font-bold">{`r/${user.nickname}`}</h3>
         </Link>
         <p>5 Hour ago</p>
