@@ -7,6 +7,7 @@ import NewPage from "../../pages/newfeedPage/NewPage";
 import PopularPage from "../../pages/newfeedPage/PopularPage";
 import FriendPage from "../../pages/newfeedPage/FriendPage";
 import MainContentLayout from "../layout/MainContentLayout";
+import DetailPostPage from "../../pages/DetailPostPage";
 
 function AppRouter() {
   return (
@@ -20,6 +21,7 @@ function AppRouter() {
           <Route path="/new" element={<NewPage />} />
           <Route path="/popular" element={<PopularPage />} />
           <Route path="/friends" element={<FriendPage />} />
+          <Route path="/post/:id" element={<DetailPostPage />} />
         </Route>
       </Route>
     </Routes>
