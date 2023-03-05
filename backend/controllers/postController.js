@@ -69,7 +69,9 @@ const postController = {
       });
     }
   },
-  upVoteAPost: async (req, res) => {},
+  upVoteAPost: async (req, res) => {
+    
+  },
   downVoteAPost: async (req, res) => {},
 };
 
